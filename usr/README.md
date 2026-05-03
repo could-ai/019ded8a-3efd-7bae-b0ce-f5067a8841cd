@@ -1,62 +1,59 @@
 # JADAI — Just A Dedicated AI (Elderly Companion System)
 
-JADAI is a comprehensive elderly companion system and family dashboard built with Flutter. It consists of two main "faces" within a single app: a serene, distraction-free voice interface for the elderly person, and a detailed monitoring dashboard for family members. 
+JADAI is a comprehensive elderly companion system and family dashboard built with React Native. It consists of two main "faces" within a single app: a serene, distraction-free voice interface for the elderly person, and a detailed monitoring dashboard for family members.
 
 ## Product Overview
 
-The core concept is to provide a non-intrusive companion device that sits in an elderly person's home. The JADAI app connects to a hardware hub (e.g. Arduino via USB OTG) that reads environment and biometric sensors. The app runs AI models locally to process voice commands, answer questions, trigger actions, and analyze the user's wellbeing.
+The core concept is to provide a non-intrusive companion device that sits in an elderly person's home. The JADAI app connects to a hardware hub (or mocked sensors) that reads environment and biometric sensors. The app manages simulated interactions, answering questions, triggering actions, and analyzing the user's wellbeing.
 
-Family members log in with a different role to view the "Child Dashboard" – a real-time monitor showing sensor data, mood tracking, activity logs, alerts, and remote actions without needing an AI model loaded on their own devices.
+Family members log in with a different role to view the "Family Dashboard" – a real-time monitor showing sensor data, mood tracking, activity logs, alerts, and remote actions.
 
 ## Complete Feature List
 
 * **Role Selection:** Start the app as an "Elderly Companion" or a "Family Dashboard".
 * **Elderly Companion UI:**
   * Clean, warm, large-text UI with no complicated menus.
-  * Central animated "orb" that pulses and reacts to voice interaction.
+  * Central animated "orb" that breathes and reacts to interactions.
   * Shortcut buttons for quick actions (Call Family, Reminders, SOS).
 * **Family Dashboard:**
-  * **Environment Panel:** Live sensor readings (Temperature, Humidity, Motion, Air Quality, Heart Rate, SpO2) and an interactive mock panic simulation.
-  * **Wellbeing & Mood (Mocked):** Real-time mood analysis derived from conversations.
-  * **Activity Timeline (Mocked):** Scrollable chronological event log.
-  * **Alerts Panel (Mocked):** Safety and environment anomaly notifications.
-  * **Remote Actions (Mocked):** Capability to send voice notes or reminders.
-* **Mock Hardware Service:** Internal Dart stream service simulating realistic Arduino sensor updates.
+  * **Environment Panel:** Live sensor readings (Temperature, Humidity, Light, Pressure, Heart Rate, SpO2) driven by an automated mock service.
+  * **Timeline:** Scrollable chronological event log capturing interactions and reminders.
+  * **Alerts Panel:** Safety and environment anomaly notifications.
+  * **Actions:** Capability to set remote reminders and view contact options.
+* **Mock Sensor & Action Handlers:** 
+  * `MockSensorService` continuously pushes telemetry data into the global store.
+  * `ActionHandler` parses mock text inputs (like `[CALL: Family]` or `[REMINDER: ...]`) into actionable system events.
 
 ## Main User Flows
 
 1. **Role Setup:** On app launch, the user chooses between the Elderly UI and the Family Dashboard.
-2. **Elderly Interaction:** The elderly user views the calm glowing orb. Tapping it mimics activating a voice interaction (animations and UI states respond). Quick shortcuts are available at the bottom.
-3. **Family Monitoring:** The child views the Environment tab. Live mock sensor data streams onto visually coded cards. A "Simulate Panic Button" tests the threshold coloring (cards turn red if values go out of bounds).
+2. **Elderly Interaction:** The elderly user views the calm glowing orb. Pressing shortcuts instantly creates timeline logs, sends SOS alerts, or triggers simulated calls.
+3. **Family Monitoring:** The family member navigates the bottom tab bar. They can view live streaming metrics on the Environment tab, read through the Timeline, or check the Alerts tab for critical notifications.
 
 ## Tech Stack
 
-* **Frontend:** Flutter & Dart
-* **State Management & Routing:** Built-in Flutter (`setState` and `Navigator`)
-* **Simulated Hardware:** Internal Dart Streams & Timers (`MockHardwareService`)
-* **Target Platforms:** iOS, Android, macOS, Windows, Linux, and Web
+* **Frontend:** React Native (TypeScript) - Bare workflow
+* **State Management:** Zustand
+* **Routing:** React Navigation (Native Stack + Bottom Tabs)
+* **Styling:** React Native StyleSheet
+* **Simulated Hardware:** Internal TypeScript Services (`MockSensorService`, `ActionHandler`)
+* **Target Platforms:** Android, iOS
 
 ## Setup / Run Instructions
 
-Ensure you have Flutter installed, then run the following commands:
+Ensure you have Node.js, Watchman, and the React Native CLI setup for Android development.
 
 ```bash
-# Fetch dependencies
-flutter pub get
+cd react_native_app
 
-# Run the app on your preferred target device/simulator
-flutter run
+# Install dependencies
+npm install
+
+# Run the app on Android
+npx react-native run-android
 ```
 
-*Note: The hardware sensors and AI components are currently mocked by `MockHardwareService` for development purposes. Real device integration requires the respective hardware and native plugins.*
-
-## Deployment Notes
-
-Currently, all mock processes run locally within the application. For the production release, the app will integrate with:
-* Native bindings for `llama.cpp` to run local LLMs.
-* `vosk` / `piper_tts` for voice interaction.
-* `usb_serial` for Arduino connectivity.
-* A cloud relay (e.g., Firebase) to synchronize real-time alerts to the child app.
+*Note: The hardware sensors and interactions are currently mocked for development purposes.*
 
 ---
 
